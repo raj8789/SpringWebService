@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/demo package for spring webservice.iml" filepath="$PROJECT_DIR$/.idea/demo package for spring webservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo-package-for-spring-webservice/demo-package-for-spring-webservice.iml" filepath="$PROJECT_DIR$/demo-package-for-spring-webservice/demo-package-for-spring-webservice.iml" />
+    </modules>
+  </component>
+</project>
