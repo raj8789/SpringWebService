@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeDTO;
-import com.example.demo.entity.EmployeeEntity;
-import com.example.demo.repository.EmployeeRepositry;
+import com.example.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class EmployeeController {
 
     @Autowired
-    private EmployeeRepositry employeeRepositry;
+    private EmployeeService employeeService;
 
     @GetMapping("/greet")
     public String getGreeting(){
@@ -22,16 +21,16 @@ public class EmployeeController {
     }
 
 @GetMapping("/{employeeID}")
-public EmployeeEntity getEmployeeDTObyID(@PathVariable int employeeID){
-    return employeeRepositry.findById(employeeID).orElse(null);
+public EmployeeDTO getEmployeeDTObyID(@PathVariable int employeeID){
+    return employeeService.getEmployeeDTObyID(employeeID);
 }
 @GetMapping("/all")
-public List<EmployeeEntity> getEmp(){
-    return employeeRepositry.findAll();
+public List<EmployeeDTO> getEmp(){
+    return employeeService.getEmp();
 }
 
     @PostMapping(path ="/enter", consumes = "application/json")
-    public EmployeeEntity putEmp(@RequestBody EmployeeEntity employeeDTO){
-        return employeeRepositry.save(employeeDTO);
+    public EmployeeDTO putEmp(@RequestBody EmployeeDTO employeeDTO){
+        return employeeService.putEmp(employeeDTO);
     }
 }
