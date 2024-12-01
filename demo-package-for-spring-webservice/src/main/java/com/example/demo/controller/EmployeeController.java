@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employee")
@@ -32,5 +33,19 @@ public List<EmployeeDTO> getEmp(){
     @PostMapping(path ="/enter", consumes = "application/json")
     public EmployeeDTO putEmp(@RequestBody EmployeeDTO employeeDTO){
         return employeeService.putEmp(employeeDTO);
+    }
+
+    @DeleteMapping("/delete/{employeeId}")
+    public boolean deleteEmployeeById(@PathVariable Integer employeeId){
+        return employeeService.deleteEmployeeById(employeeId);
+    }
+    @PutMapping(path ="/update/{employeeId}", consumes = "application/json")
+    public EmployeeDTO updateEmp(@RequestBody EmployeeDTO employeeDTO,@PathVariable Integer employeeId){
+        return employeeService.updateEmp(employeeDTO,employeeId);
+    }
+
+    @PatchMapping(path="partial/update/{employeeId}")
+    public EmployeeDTO partialUpdate(@RequestBody Map<String,Object> objectMap,@PathVariable Integer employeeId){
+        return employeeService.partialUpdate(objectMap,employeeId);
     }
 }

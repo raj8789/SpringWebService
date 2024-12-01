@@ -6,10 +6,13 @@ import com.example.demo.entity.EmployeeEntity;
 import com.example.demo.repository.EmployeeRepositry;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmployeeService {
@@ -22,6 +25,9 @@ public class EmployeeService {
     }
     public EmployeeDTO getEmployeeDTObyID(int employeeID){
         EmployeeEntity employeeEntity=employeeRepositry.findById(employeeID).orElse(null);
+        if(employeeEntity==null){
+            return null;
+        }
         return modelMapper.map(employeeEntity, EmployeeDTO.class);
     }
     public List<EmployeeDTO> getEmp(){
@@ -34,5 +40,36 @@ public class EmployeeService {
     public EmployeeDTO putEmp(EmployeeDTO employeeDTO){
         EmployeeEntity temp=employeeRepositry.save(modelMapper.map(employeeDTO,EmployeeEntity.class));
         return modelMapper.map(temp, EmployeeDTO.class);
+    }
+
+    public EmployeeDTO updateEmp(EmployeeDTO employeeDTO, Integer employeeId) {
+        EmployeeEntity  employeeEntity= modelMapper.map(employeeDTO, EmployeeEntity.class);
+        if(employeeRepositry.existsById(employeeId)) {
+            employeeEntity.setId(employeeId);
+        }
+        EmployeeEntity temp= employeeRepositry.save(employeeEntity);
+        return modelMapper.map(temp, EmployeeDTO.class);
+    }
+    public boolean deleteEmployeeById(Integer employeeId){
+        if(employeeRepositry.existsById(employeeId)){
+            employeeRepositry.deleteById(employeeId);
+            return  true;
+        }
+        return false;
+    }
+
+    public EmployeeDTO partialUpdate(Map<String,Object> objectMap, Integer employeeId) {
+            boolean exists=employeeRepositry.existsById(employeeId);
+            if(!exists){
+                return null;
+            }
+            EmployeeEntity employeeEntity=employeeRepositry.findById(employeeId).get();
+            objectMap.forEach((key,value)->{
+                Field field=ReflectionUtils.findField(EmployeeEntity.class,key);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field,employeeEntity,value);
+            });
+            EmployeeEntity employee= employeeRepositry.save(employeeEntity);
+            return modelMapper.map(employee, EmployeeDTO.class);
     }
 }
