@@ -27,6 +27,10 @@ public class EmployeeEntity {
     private LocalDate dateOdJoining;
     @JsonProperty("active")
     private Boolean isActive;
+    private String role;
+    private Integer age;
+
+    private Double salary;
 
     @PrePersist
     public void prePersist() {

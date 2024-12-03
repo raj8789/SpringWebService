@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotations.PrimeNumberValidation;
 import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.service.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +38,8 @@ public ResponseEntity<List<EmployeeDTO>> getEmp(){
     return ResponseEntity.ok(t);
 }
 
-    @PostMapping(path ="/enter", consumes = "application/json")
-    public ResponseEntity<EmployeeDTO> putEmp(@RequestBody EmployeeDTO employeeDTO){
+    @PostMapping(path ="/enter")
+    public ResponseEntity<EmployeeDTO> putEmp(@RequestBody @Valid EmployeeDTO employeeDTO){
         EmployeeDTO  employeeDTO1= employeeService.putEmp(employeeDTO);
         return ResponseEntity.ok(employeeDTO1);
     }
@@ -51,7 +53,7 @@ public ResponseEntity<List<EmployeeDTO>> getEmp(){
         return ResponseEntity.ok(b);
     }
     @PutMapping(path ="/update/{employeeId}", consumes = "application/json")
-    public ResponseEntity<EmployeeDTO> updateEmp(@RequestBody EmployeeDTO employeeDTO,@PathVariable Integer employeeId){
+    public ResponseEntity<EmployeeDTO> updateEmp(@RequestBody @Valid EmployeeDTO employeeDTO,@PathVariable Integer employeeId){
         return ResponseEntity.ok(employeeService.updateEmp(employeeDTO,employeeId));
     }
 
