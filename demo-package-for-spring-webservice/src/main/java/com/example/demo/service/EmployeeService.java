@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.controller.EmployeeController;
 import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.entity.EmployeeEntity;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.EmployeeRepositry;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,8 @@ public class EmployeeService {
         EmployeeEntity  employeeEntity= modelMapper.map(employeeDTO, EmployeeEntity.class);
         if(employeeRepositry.existsById(employeeId)) {
             employeeEntity.setId(employeeId);
+        }else{
+            throw new ResourceNotFoundException("Employee Not Exists with id "+employeeId);
         }
         EmployeeEntity temp= employeeRepositry.save(employeeEntity);
         return modelMapper.map(temp, EmployeeDTO.class);
@@ -60,8 +63,8 @@ public class EmployeeService {
 
     public EmployeeDTO partialUpdate(Map<String,Object> objectMap, Integer employeeId) {
             boolean exists=employeeRepositry.existsById(employeeId);
-            if(!exists){
-                return null;
+            if(!exists) {
+                 return null;
             }
             EmployeeEntity employeeEntity=employeeRepositry.findById(employeeId).get();
             objectMap.forEach((key,value)->{
